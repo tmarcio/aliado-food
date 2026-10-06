@@ -85,3 +85,5 @@ footer .btn{display:inline-block;padding:13px 24px;font-size:16px;opacity:1}foot
 [data-theme=dark] .sbt p{color:#d9c8be}[data-theme=dark] .sbt p b{color:var(--o)}[data-theme=dark] .sbi img{background:#201311}
 [data-theme=dark] .logos img{background:#201311}[data-theme=dark] .strip b,[data-theme=dark] .card b,[data-theme=dark] .tot .big{color:#ff7a5f}
 [data-theme=dark] .add:hover{color:var(--d)}[data-theme=dark] .plus{background:#0f0705}[data-theme=dark] footer{background:#0f0705}
+
+.lg.tr{background:none!important;padding:0!important;border-radius:0!important;box-shadow:none!important;width:auto;object-fit:contain}.nav .lg.tr{height:46px}.lg.w.tr{height:60px}
