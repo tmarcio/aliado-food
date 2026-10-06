@@ -24,7 +24,7 @@ function renderMenu(){
  const cs=['Todos',...new Set(P.map(p=>p.category))];
  $('#cats').innerHTML=cs.map(c=>`<button class="${c==cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
  $$('#cats button').forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderMenu()});
- $('#grid').innerHTML=P.filter(p=>cat=='Todos'||p.category==cat).map(p=>`<div class="card"><img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" onerror="${FB}"><div><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p><div class="pr"><b>${kz(p.price)}</b><button class="btn" data-add="${p.id}">Adicionar</button></div></div></div>`).join('')||'<p>Sem produtos nesta categoria.</p>';
+ $('#grid').innerHTML=P.filter(p=>cat=='Todos'||p.category==cat).map(p=>`<div class="card"><img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" onerror="${FB}"><div><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p><div class="pr"><b>${kz(p.price)}</b><button class="add" data-add="${p.id}" aria-label="Adicionar ${esc(p.name)}">+</button></div></div></div>`).join('')||'<p>Sem produtos nesta categoria.</p>';
  $$('[data-add]').forEach(b=>b.onclick=()=>{add(b.dataset.add,1);openCart()});
 }
 function add(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];localStorage.af_cart=JSON.stringify(cart);renderCart()}
