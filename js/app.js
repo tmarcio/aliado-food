@@ -14,10 +14,11 @@ $$('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderMenu();$('#menu').
 
 if(!ok){$('#warn').hidden=false}else{sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_KEY);load()}
 async function load(){
- const [p,z,pa,ev]=await Promise.all([sb.from('products').select('*').order('category').order('name'),sb.from('zones').select('*').order('municipality'),sb.from('partners').select('*').order('name'),sb.from('events').select('*').order('event_date',{ascending:false})]);
+ const [p,z,pa,ev,se]=await Promise.all([sb.from('products').select('*').order('category').order('name'),sb.from('zones').select('*').order('municipality'),sb.from('partners').select('*').order('name'),sb.from('events').select('*').order('event_date',{ascending:false}),sb.from('settings').select('*')]);
+ const S=Object.fromEntries((se.data||[]).map(r=>[r.key,r.value]));if(S.logo_header)$('#logoH').src=S.logo_header;if(S.logo_footer)$('#logoF').src=S.logo_footer;
  P=p.data||[];Z=z.data||[];renderMenu();renderCart();
  $('#mun').innerHTML='<option value="">Município (obrigatório)</option>'+Z.map(x=>`<option>${esc(x.municipality)}</option>`).join('');
- $('#partners').innerHTML=(pa.data||[]).map(x=>`<div><img src="${esc(x.image_url)}" alt="${esc(x.name)}" onerror="${FB}"><p>${esc(x.name)}</p></div>`).join('')||'<p>Em breve.</p>';
+$('#partners').innerHTML=(pa.data||[]).map(x=>{const u=/^https?:\/\//.test(x.url||'')?x.url:'',i=`<img src="${esc(x.image_url)}" alt="${esc(x.name)}" onerror="${FB}"><p>${esc(x.name)}</p>`;return u?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(x.name)} (abre noutro separador)">${i}<small>Visitar</small></a>`:`<div>${i}</div>`}).join('')||'<p>Em breve.</p>';
  $('#events').innerHTML=(ev.data||[]).map(x=>`<div class="card"><img src="${esc(x.image_url)}" alt="" onerror="${FB}"><div><h3>${esc(x.title)}</h3><p>${esc(x.description)}</p></div></div>`).join('')||'<p>Em breve.</p>';
 }
 function renderMenu(){
@@ -62,3 +63,10 @@ $('#job').onsubmit=async e=>{e.preventDefault();const f=e.target,d=Object.fromEn
  const {error}=await sb.from('applications').insert(d);
  fetch('https://formsubmit.co/ajax/'+C.EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'Candidatura — Aliado Food',...d})}).catch(()=>{});
  m.textContent=error?'Erro ao enviar. Tente novamente ou escreva para '+C.EMAIL:'Candidatura enviada. Obrigado!';if(!error)f.reset()};
+
+$('#yr').textContent=new Date().getFullYear();const E=window.EMP||{};
+$('#legal').textContent=[E.legal,E.nif&&'NIF '+E.nif,E.alvara&&'Alvará '+E.alvara,E.morada].filter(Boolean).join(' · ');
+
+const IC={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>'};
+function setTheme(t){document.documentElement.dataset.theme=t;localStorage.af_theme=t;$('#themeBtn').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[t=='dark'?'sun':'moon']}</svg>`}
+$('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');setTheme(document.documentElement.dataset.theme||'light');

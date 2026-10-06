@@ -1,42 +1,68 @@
 const C=window.CFG,$=s=>document.querySelector(s),sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_KEY),V=$('#view');
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const kz=n=>new Intl.NumberFormat('pt-AO').format(n)+' Kz';
+const kz=n=>new Intl.NumberFormat('pt-AO').format(n||0)+' Kz';
+const I={bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',calendar:'<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',image:'<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',print:'<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>',send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',undo:'<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>',home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>'};
+const svg=(n,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
 const ST={recebido:'Recebido',preparando:'Em preparação',pronto:'Pronto',a_caminho:'A caminho',entregue:'Entregue',cancelado:'Cancelado'};
-const T={products:{n:'Produtos',f:[['name','Nome'],['description','Descrição'],['price','Preço (Kz)','number'],['category','Categoria (Refeições, Pizzas, Salgados, Doces, Bebidas)'],['image_url','Imagem','img'],['active','Activo','bool']]},
-zones:{n:'Taxas de entrega',f:[['municipality','Município'],['fee','Taxa (Kz)','number']]},
-couriers:{n:'Estafetas',f:[['name','Nome'],['phone','Telemóvel (ex.: 2449...)'],['available','Disponível','bool']]},
-partners:{n:'Parceiros',f:[['name','Nome'],['image_url','Imagem / logótipo','img']]},
-events:{n:'Actividades',f:[['title','Título'],['description','Descrição'],['image_url','Imagem','img'],['event_date','Data','date']]}};
-$('#lf').onsubmit=async e=>{e.preventDefault();const {error}=await sb.auth.signInWithPassword({email:e.target.e.value,password:e.target.p.value});if(error)$('#le').textContent='Email ou palavra-passe inválidos.';else init()};
-$('#out').onclick=async e=>{e.preventDefault();await sb.auth.signOut();location.reload()};
+const T={products:{f:[['name','Nome'],['description','Descrição'],['price','Preço (Kz)','number'],['category','Categoria (Refeições, Pizzas, Salgados, Doces, Bebidas)'],['image_url','Imagem','img'],['active','Visível no site','bool']]},
+zones:{f:[['municipality','Município'],['fee','Taxa (Kz)','number']]},
+couriers:{f:[['name','Nome'],['phone','Telemóvel (ex.: 244929809889)'],['available','Disponível','bool']]},
+partners:{f:[['name','Nome'],['image_url','Logótipo / imagem','img'],['url','Link do site ou rede social (https://...)','link']]},
+events:{f:[['title','Título'],['description','Descrição'],['image_url','Imagem','img'],['event_date','Data','date']]}};
+const NAV=[['Operações',[['orders','Pedidos','bag'],['couriers','Estafetas','truck'],['zones','Taxas de entrega','pin']]],['Catálogo',[['products','Produtos','utensils']]],['Conteúdo',[['partners','Parceiros','users'],['events','Actividades','calendar']]],['Definições',[['settings','Logótipos','image']]]];
+const LBL=Object.fromEntries(NAV.flatMap(g=>g[1]).map(x=>[x[0],x[1]]));
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2600)};
+function setTheme(t){document.documentElement.dataset.theme=t;localStorage.af_theme=t;$('#theme').innerHTML=svg(t=='dark'?'sun':'moon',20)}
+$('#theme').onclick=()=>setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');
+setTheme(localStorage.af_theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+$('#out').innerHTML=svg('out',20);$('#site').innerHTML=svg('home')+' Ver site';
+$('#lf').onsubmit=async e=>{e.preventDefault();const {error}=await sb.auth.signInWithPassword({email:e.target.e.value,password:e.target.p.value});error?$('#le').textContent='Email ou palavra-passe inválidos.':init()};
+$('#out').onclick=async()=>{await sb.auth.signOut();location.reload()};
 async function init(){const {data:{session}}=await sb.auth.getSession();if(!session)return;
- const {data}=await sb.from('admins').select('user_id').eq('user_id',session.user.id);
- if(!data?.length){$('#le').textContent='Esta conta não tem permissão de administrador.';return}
+ const {data,error}=await sb.from('admins').select('user_id').eq('user_id',session.user.id);
+ if(error){$('#le').textContent='Erro Supabase: '+error.message;return}
+ if(!data?.length){$('#le').textContent='Esta conta ('+session.user.email+') não está na tabela admins.';return}
  $('#login').hidden=true;$('#panel').hidden=false;
- $('#tabs').innerHTML=[['orders','Pedidos'],...Object.entries(T).map(([k,v])=>[k,v.n])].map(([k,n])=>`<button data-t="${k}">${n}</button>`).join('');
- document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.dataset.t));show('orders');
- sb.channel('o').on('postgres_changes',{event:'*',schema:'public',table:'orders'},p=>{if(p.eventType=='INSERT')beep();cur=='orders'&&show('orders')}).subscribe()}
+ $('#nav').innerHTML=NAV.map(([g,it])=>`<p class="ng">${g}</p>`+it.map(([k,l,ic])=>`<button data-t="${k}">${svg(ic)}<span>${l}</span></button>`).join('')).join('');
+ document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.t));show('orders');
+ sb.channel('o').on('postgres_changes',{event:'*',schema:'public',table:'orders'},p=>{if(p.eventType=='INSERT')beep();cur=='orders'&&orders()}).subscribe()}
+let cur,OL=[],OF='todos';
+async function show(t){cur=t;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));$('#ttl').textContent=LBL[t];t=='orders'?orders():t=='settings'?settings():crud(t)}
 function beep(){try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();o.stop(a.currentTime+.4)}catch(e){}}
 function printOrder(r){const w=open('','_blank');w.document.write(`<body style="font:15px sans-serif;max-width:320px"><h2>Aliado Food</h2><b>${esc(r.reference)}</b><br>${esc(r.customer_name)} · ${esc(r.phone)}<br>${r.mode=='delivery'?'Entrega: '+esc([r.municipality,r.neighborhood,r.street].filter(Boolean).join(', ')):'Levantamento'}<hr>${(r.items||[]).map(i=>`${i.qty}x ${esc(i.name)} — ${kz(i.price*i.qty)}`).join('<br>')}<hr>Entrega: ${kz(r.fee)}<br><b>Total: ${kz(r.total)}</b>${r.notes?'<br>Obs: '+esc(r.notes):''}</body>`);w.document.close();w.print()}
-let cur,OL=[];async function show(t){cur=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));t=='orders'?orders():crud(t)}
 async function orders(){const [o,c]=await Promise.all([sb.from('orders').select('*').order('created_at',{ascending:false}).limit(100),sb.from('couriers').select('*').order('name')]);
- const cs=c.data||[];OL=o.data||[];V.innerHTML=(o.data||[]).map(r=>{const co=cs.find(x=>x.id==r.courier_id);
+ const cs=c.data||[];OL=o.data||[];const today=new Date().toDateString(),td=OL.filter(r=>new Date(r.created_at).toDateString()==today);
+ const list=OL.filter(r=>OF=='todos'||r.status==OF);
+ V.innerHTML=`<div class="kp"><div><span>Pedidos hoje</span><b>${td.length}</b></div><div><span>Em curso</span><b>${OL.filter(r=>!['entregue','cancelado'].includes(r.status)).length}</b></div><div><span>Vendas hoje</span><b>${kz(td.filter(r=>r.status!='cancelado').reduce((s,r)=>s+ +r.total,0))}</b></div></div>
+ <div class="chips">${['todos',...Object.keys(ST)].map(k=>`<button data-f="${k}" class="${k==OF?'on':''}">${k=='todos'?'Todos':ST[k]}</button>`).join('')}</div>
+ ${list.map(r=>{const co=cs.find(x=>x.id==r.courier_id);
  const msg=`Nova entrega Aliado Food\nPedido ${r.reference}\nCliente: ${r.customer_name} (${r.phone})\nLocal: ${[r.municipality,r.neighborhood,r.street].filter(Boolean).join(', ')}\nTotal a cobrar: ${kz(r.total)}`;
- return `<div class="ord"><div><b>${esc(r.reference)}</b> · ${r.mode=='delivery'?'Entrega — '+esc(r.municipality):'Levantamento'}<br>${esc(r.customer_name)} · <a href="https://wa.me/${esc(r.phone.replace(/\D/g,''))}" target="_blank">${esc(r.phone)}</a><br><small>${(r.items||[]).map(i=>i.qty+'x '+esc(i.name)).join(', ')}</small><br><b>${kz(r.total)}</b> <small>(entrega ${kz(r.fee)})</small>${r.notes?'<br><small>Obs: '+esc(r.notes)+'</small>':''}</div>
- <div><select data-s="${r.id}">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${k==r.status?'selected':''}>${v}</option>`).join('')}</select>
- ${r.mode=='delivery'?`<select data-c="${r.id}"><option value="">Estafeta…</option>${cs.map(x=>`<option value="${x.id}" ${x.id==r.courier_id?'selected':''}>${esc(x.name)}${x.available?'':' (indisponível)'}</option>`).join('')}</select>${co?`<a class="btn" target="_blank" href="https://wa.me/${co.phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}">Enviar ao estafeta</a>`:''}`:''}<button class="btn ghost" data-p="${r.id}">Imprimir</button></div></div>`}).join('')||'<p>Sem pedidos.</p>';
+ return `<div class="ord"><div class="oh"><b>${esc(r.reference)}</b><span class="bd ${r.status}">${ST[r.status]||esc(r.status)}</span></div>
+ <div>${esc(r.customer_name)} · <a href="https://wa.me/${esc(String(r.phone).replace(/\D/g,''))}" target="_blank" rel="noopener">${esc(r.phone)}</a><br><span class="mu">${r.mode=='delivery'?'Entrega — '+esc([r.municipality,r.neighborhood,r.street].filter(Boolean).join(', ')):'Levantamento no ponto de venda'} · ${new Date(r.created_at).toLocaleString('pt-AO')}</span><br><span class="mu">${(r.items||[]).map(i=>i.qty+'x '+esc(i.name)).join(', ')}${r.notes?' · Obs: '+esc(r.notes):''}</span></div>
+ <div class="of"><span class="tt">${kz(r.total)}</span><select data-s="${r.id}" aria-label="Estado">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${k==r.status?'selected':''}>${v}</option>`).join('')}</select>
+ ${r.mode=='delivery'?`<select data-c="${r.id}" aria-label="Estafeta"><option value="">Estafeta…</option>${cs.map(x=>`<option value="${x.id}" ${x.id==r.courier_id?'selected':''}>${esc(x.name)}${x.available?'':' (indisponível)'}</option>`).join('')}</select>${co?`<a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/${co.phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}">${svg('send',16)} Enviar ao estafeta</a>`:''}`:''}
+ <button class="btn ghost sm" data-p="${r.id}">${svg('print',16)} Imprimir</button></div></div>`}).join('')||'<p class="mu">Sem pedidos neste filtro.</p>'}`;
+ V.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{OF=b.dataset.f;orders()});
  V.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>printOrder(OL.find(x=>x.id==b.dataset.p)));
- V.querySelectorAll('[data-s]').forEach(s=>s.onchange=async()=>{await sb.from('orders').update({status:s.value}).eq('id',s.dataset.s)});
- V.querySelectorAll('[data-c]').forEach(s=>s.onchange=async()=>{await sb.from('orders').update({courier_id:s.value||null,status:s.value?'a_caminho':'preparando'}).eq('id',s.dataset.c);orders()})}
-async function crud(t){const c=T[t],{data}=await sb.from(t).select('*').order(c.f[0][0]),L=data||[];
- V.innerHTML=`<h2>${c.n}</h2><form id="fm" class="fm">${c.f.map(([k,l,ty])=>ty=='bool'?`<label><input type="checkbox" name="${k}" checked style="width:auto"> ${l}</label>`:ty=='img'?`<label>${l}<input type="file" accept="image/*" data-k="${k}"><input name="${k}" placeholder="ou cole o URL da imagem"></label>`:`<label>${l}<input name="${k}" type="${ty||'text'}" ${ty=='number'?'step="any"':''} ${k=='description'?'':'required'}></label>`).join('')}<input type="hidden" name="id"><button class="btn">Guardar</button><button type="button" class="btn ghost" id="clr">Limpar</button><p id="fe" class="err"></p></form>
- ${L.map(r=>`<div class="row"><span>${r.image_url?`<img src="${esc(r.image_url)}" height="36" style="border-radius:6px;vertical-align:middle"> `:''}<b>${esc(r[c.f[0][0]])}</b> ${esc(r[c.f[1][0]]??'')}${r.active===false||r.available===false?' <small>(inactivo)</small>':''}</span><span><button class="btn ghost" data-e="${r.id}">Editar</button> <button class="btn ghost" data-x="${r.id}">Apagar</button></span></div>`).join('')}`;
- const f=$('#fm');$('#clr').onclick=()=>f.reset();
- V.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const r=L.find(x=>x.id==b.dataset.e);c.f.forEach(([k,,ty])=>{if(ty=='bool')f[k].checked=r[k];else f[k].value=r[k]??''});f.id.value=r.id;scrollTo(0,0)});
- V.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{if(confirm('Apagar este registo?')){const {error}=await sb.from(t).delete().eq('id',b.dataset.x);error?alert(error.message):crud(t)}});
- f.onsubmit=async e=>{e.preventDefault();const o={};
-  for(const [k,,ty] of c.f){if(ty=='bool')o[k]=f[k].checked;else if(ty=='img'){const file=f.querySelector(`[data-k=${k}]`).files[0];o[k]=f[k].value;
-    if(file){const p=`${t}/${Date.now()}-${file.name.replace(/[^\w.]/g,'_')}`,{error}=await sb.storage.from('media').upload(p,file);if(error){$('#fe').textContent=error.message;return}o[k]=sb.storage.from('media').getPublicUrl(p).data.publicUrl}}
+ V.querySelectorAll('[data-s]').forEach(s=>s.onchange=async()=>{await sb.from('orders').update({status:s.value}).eq('id',s.dataset.s);toast('Estado actualizado');orders()});
+ V.querySelectorAll('[data-c]').forEach(s=>s.onchange=async()=>{await sb.from('orders').update({courier_id:s.value||null,status:s.value?'a_caminho':'preparando'}).eq('id',s.dataset.c);toast('Estafeta atribuído');orders()})}
+async function upload(file,folder){const p=`${folder}/${Date.now()}-${file.name.replace(/[^\w.]/g,'_')}`,{error}=await sb.storage.from('media').upload(p,file);if(error)throw error;return sb.storage.from('media').getPublicUrl(p).data.publicUrl}
+async function crud(t){const c=T[t],{data,error:le}=await sb.from(t).select('*').order(c.f[0][0]),L=data||[];
+ V.innerHTML=`${le?`<p class="err">${esc(le.message)}</p>`:''}<div class="panel" style="margin-bottom:18px"><h3 id="fh">Novo registo</h3><form id="fm" class="fm">${c.f.map(([k,l,ty])=>ty=='bool'?`<label class="ck"><input type="checkbox" name="${k}" checked> ${l}</label>`:ty=='img'?`<label>${l}<input type="file" accept="image/*" data-k="${k}"><input name="${k}" placeholder="ou cole o URL da imagem"></label>`:`<label>${l}<input name="${k}" type="${ty=='number'||ty=='date'?ty:'text'}" ${ty=='number'?'step="any"':''} ${k=='description'||ty=='link'?'':'required'}></label>`).join('')}<input type="hidden" name="id"><div class="ac"><button class="btn">${svg('save',16)} Guardar</button><button type="button" class="btn ghost" id="clr">${svg('undo',16)} Limpar</button></div></form><p id="fe" class="err"></p></div>
+ ${L.map(r=>`<div class="row"><div class="rl">${r.image_url?`<img src="${esc(r.image_url)}" alt="" onerror="this.style.visibility='hidden'">`:''}<div><b>${esc(r[c.f[0][0]])}</b>${r.active===false||r.available===false?' <span class="bd cancelado">Inactivo</span>':''}<small>${esc(r.url||r[c.f[1][0]]||'')}</small></div></div><div class="ra"><button class="btn ghost sm" data-e="${r.id}">${svg('edit',15)} Editar</button><button class="btn ghost sm dng" data-x="${r.id}">${svg('trash',15)} Apagar</button></div></div>`).join('')||'<p class="mu">Ainda sem registos.</p>'}`;
+ const f=$('#fm');$('#clr').onclick=()=>{f.reset();$('#fh').textContent='Novo registo'};
+ V.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const r=L.find(x=>x.id==b.dataset.e);c.f.forEach(([k,,ty])=>{if(ty=='bool')f[k].checked=r[k];else f[k].value=r[k]??''});f.id.value=r.id;$('#fh').textContent='Editar registo';scrollTo({top:0,behavior:'smooth'})});
+ V.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{if(confirm('Apagar este registo?')){const {error}=await sb.from(t).delete().eq('id',b.dataset.x);error?alert(error.message):(toast('Registo apagado'),crud(t))}});
+ f.onsubmit=async e=>{e.preventDefault();const o={};try{
+  for(const [k,,ty] of c.f){if(ty=='bool')o[k]=f[k].checked;else if(ty=='img'){const file=f.querySelector(`[data-k=${k}]`).files[0];o[k]=file?await upload(file,t):(f[k].value||null)}
+   else if(ty=='link'){let u=f[k].value.trim();o[k]=u?(/^https?:\/\//i.test(u)?u:'https://'+u):null}
    else o[k]=ty=='number'?+f[k].value:(f[k].value||null)}
-  if(f.id.value)o.id=f.id.value;const {error}=await sb.from(t).upsert(o);error?$('#fe').textContent=error.message:crud(t)}}
+  if(f.id.value)o.id=f.id.value;const {error}=await sb.from(t).upsert(o);if(error)throw error;toast('Guardado');crud(t)}catch(er){$('#fe').textContent=er.message}}}
+async function settings(){const {data}=await sb.from('settings').select('*'),S=Object.fromEntries((data||[]).map(r=>[r.key,r.value]));
+ const F=[['logo_header','Logótipo do cabeçalho','Aparece no topo do site. Use PNG com fundo branco ou transparente, com pelo menos 600 px de largura.'],['logo_footer','Logótipo do rodapé','Aparece no fim do site, dentro de uma etiqueta branca. Use o mesmo formato.']];
+ V.innerHTML=`<div class="cards2">${F.map(([k,l,h])=>`<div class="panel"><h3>${l}</h3><p class="mut">${h}</p><div class="prev"><img id="pv_${k}" src="${esc(S[k]||'assets/logo.png')}" alt="Pré-visualização"></div><input type="file" accept="image/*" data-k="${k}"><div class="ac" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-save="${k}">${svg('save',16)} Guardar</button><button class="btn ghost" data-reset="${k}">${svg('undo',16)} Repor original</button></div></div>`).join('')}</div>`;
+ V.querySelectorAll('input[type=file]').forEach(i=>i.onchange=()=>{if(i.files[0])$('#pv_'+i.dataset.k).src=URL.createObjectURL(i.files[0])});
+ V.querySelectorAll('[data-save]').forEach(b=>b.onclick=async()=>{const k=b.dataset.save,file=V.querySelector(`input[data-k=${k}]`).files[0];if(!file)return toast('Escolha primeiro uma imagem');
+  try{const {error}=await sb.from('settings').upsert({key:k,value:await upload(file,'settings')});if(error)throw error;toast('Logótipo guardado')}catch(e){toast(e.message)}});
+ V.querySelectorAll('[data-reset]').forEach(b=>b.onclick=async()=>{await sb.from('settings').delete().eq('key',b.dataset.reset);toast('Logótipo original reposto');settings()})}
 init();
