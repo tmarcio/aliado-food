@@ -16,6 +16,7 @@ do $$ declare t text; begin
   execute format('create policy "admin_%1$s" on %1$I for all using(is_admin()) with check(is_admin())',t);
  end loop; end$$;
 alter table admins enable row level security;
+create policy admins_self on admins for select using (user_id=auth.uid());
 create policy pub_products on products for select using(active);
 create policy pub_zones on zones for select using(true);
 create policy pub_partners on partners for select using(true);
