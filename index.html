@@ -1,0 +1,44 @@
+<!doctype html><html lang="pt-AO"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aliado Food — Seu aliado na fome</title><meta name="description" content="Refeições, pizzas, salgados, doces e bebidas com entrega em Luanda.">
+<link rel="icon" href="assets/icon.png"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"></head><body>
+<div id="warn" hidden>Configure o Supabase em <code>js/config.js</code> para ver o menu e receber pedidos.</div>
+<header class="nav"><a href="#top"><img src="assets/logo.png" alt="Aliado Food" class="lg"></a>
+<nav><a href="#menu">Menu</a><a href="#rastreio">Rastrear</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></nav>
+<button id="cartBtn" class="btn">Carrinho <b id="cartN">0</b></button></header>
+
+<section id="top" class="hero"><div class="wrap hg"><div>
+<h1>Seu aliado<br>na fome.</h1>
+<p class="rot">Hoje a caminho: <b id="rot">pizzas</b></p>
+<p class="sub">Peça online, escolha levantar no nosso ponto de venda ou receber em casa e acompanhe o pedido em tempo real.</p>
+<div class="cta"><a href="#menu" class="btn big">Fazer pedido</a><a href="#rastreio" class="btn big ghost">Rastrear pedido</a></div></div>
+<div class="stage" id="stage"><div class="disc"></div><img src="assets/icon.png" alt="" class="ico">
+<button class="chip c1" data-cat="Refeições">Refeições</button><button class="chip c2" data-cat="Pizzas">Pizzas</button><button class="chip c3" data-cat="Salgados">Salgados</button><button class="chip c4" data-cat="Doces">Doces</button><button class="chip c5" data-cat="Bebidas">Bebidas</button></div></div></section>
+
+<main>
+<section id="menu" class="wrap sec"><h2>O nosso menu</h2><div id="cats" class="cats"></div><div id="grid" class="grid"></div></section>
+<section id="rastreio" class="band"><div class="wrap sec"><h2>Rastrear pedido</h2><p>Introduza a referência que recebeu ao finalizar (ex.: AF-261005-A1B2C).</p>
+<form id="trk" class="inl"><input id="ref" placeholder="Referência do pedido" required><button class="btn">Rastrear</button></form><div id="trkOut"></div></div></section>
+<section id="parceiros" class="wrap sec"><h2>Parceiros</h2><div id="partners" class="logos"></div></section>
+<section id="actividades" class="band"><div class="wrap sec"><h2>Actividades e eventos</h2><div id="events" class="grid"></div></div></section>
+<section id="trabalhe" class="wrap sec"><h2>Trabalhe connosco</h2><p>Quer fazer parte da equipa? Envie a sua candidatura.</p>
+<form id="job" class="fm"><input name="name" placeholder="Nome completo" required><input name="email" type="email" placeholder="Email" required><input name="phone" placeholder="Telemóvel" required><input name="role" placeholder="Função pretendida (ex.: cozinha, estafeta)"><textarea name="message" rows="4" placeholder="Fale-nos de si"></textarea><button class="btn">Enviar candidatura</button><p id="jobMsg"></p></form></section>
+</main>
+
+<footer id="contactos"><div class="wrap fg"><div><img src="assets/logo.png" alt="Aliado Food" class="lg w"><p>Seu aliado na fome.</p></div>
+<div><h3>Contactos</h3><a href="tel:+244929809889">Telemóvel: +244 929 809 889</a><a href="https://wa.me/244929809889" target="_blank" rel="noopener">WhatsApp: +244 929 809 889</a><a href="mailto:aliadofood@hotmail.com">aliadofood@hotmail.com</a></div>
+<div><h3>Redes sociais</h3><a href="https://instagram.com/aliadofood" target="_blank" rel="noopener">Instagram @aliadofood</a><a href="https://facebook.com/aliadofood.ao" target="_blank" rel="noopener">Facebook @aliadofood.ao</a></div>
+<div><h3>Fidelidade</h3><a class="btn" href="https://aliadomais.lovable.app" target="_blank" rel="noopener">ALIADO+ Programa de Fidelidade</a><a href="admin.html" class="sm">Área da equipa</a></div></div></footer>
+
+<aside id="drawer"><div class="dh"><h3>O seu carrinho</h3><button id="cx" class="x" aria-label="Fechar">×</button></div><div id="items"></div><div class="dt"><span>Subtotal</span><b id="sub">0 Kz</b></div><button id="go" class="btn big">Finalizar pedido</button></aside><div id="ov"></div>
+
+<dialog id="co"><form id="cf" method="dialog"><div class="dh"><h3>Finalizar pedido</h3><button type="button" class="x" id="cox">×</button></div>
+<div class="seg"><label><input type="radio" name="mode" value="pickup" checked>Levantar no ponto de venda</label><label><input type="radio" name="mode" value="delivery">Entrega ao domicílio</label></div>
+<input name="name" placeholder="Nome" required><input name="phone" placeholder="Telemóvel / WhatsApp" required>
+<div id="addr" hidden><select name="mun" id="mun"><option value="">Município (obrigatório)</option></select><input name="neigh" placeholder="Bairro (opcional)"><input name="street" placeholder="Rua (opcional)"></div>
+<textarea name="notes" rows="2" placeholder="Observações (opcional)"></textarea>
+<label class="ck"><input type="checkbox" id="wa" checked> Enviar também por WhatsApp (atendimento mais rápido)</label>
+<div class="tot"><span>Subtotal</span><b id="t1"></b><span>Entrega</span><b id="t2">—</b><span>Total</span><b id="t3" class="big"></b></div><p id="err" class="err"></p><button class="btn big" id="sendBtn">Confirmar pedido</button></form>
+<div id="ok" hidden></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/app.js"></script></body></html>

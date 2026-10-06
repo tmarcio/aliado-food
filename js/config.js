@@ -1,0 +1,2 @@
+// Cole aqui os dados do seu projecto Supabase (Project Settings > API). A chave "anon" é pública por design.
+window.CFG={SUPABASE_URL:"https://supabase.com/dashboard/project/puozzaerapphtktoanmz/",SUPABASE_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1b3p6YWVyYXBwaHRrdG9hbm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMzkwMTcsImV4cCI6MjEwNjgxNTAxN30.chmLOT3AFcnPPWTU3hTcGjjfOv2Q93tuFtT3sZln2NQ",WHATSAPP:"244929809889",EMAIL:"aliadofood@hotmail.com"};
