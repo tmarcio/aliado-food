@@ -1,11 +1,11 @@
 <!doctype html><html lang="pt-AO"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Aliado Food — Seu aliado na fome</title><meta name="description" content="Refeições, pizzas, salgados, doces e bebidas com entrega em Luanda.">
 <link rel="icon" href="assets/icon.png"><link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500..800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css"></head><body>
 <div id="warn" hidden>Configure o Supabase em <code>js/config.js</code> para ver o menu e receber pedidos.</div>
 <header class="nav"><a href="#top"><img src="assets/logo.png" alt="Aliado Food" class="lg"></a>
-<nav><a href="#menu">Menu</a><a href="#rastreio">Rastrear</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></nav>
+<nav><a href="#menu">Menu</a><a href="#sobre">Sobre nós</a><a href="#rastreio">Rastrear</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></nav>
 <button id="cartBtn" class="btn">Carrinho <b id="cartN">0</b></button></header>
 
 <section id="top" class="hero"><div class="wrap hg"><div>
@@ -19,7 +19,12 @@
 <div class="strip wrap"><div><b>Entrega em Luanda</b><span>Taxa calculada pelo seu Município</span></div><div><b>Levante no ponto de venda</b><span>Sem taxa de entrega</span></div><div><b>Acompanhe o pedido</b><span>Rastreio com a sua referência</span></div></div>
 <main>
 <section id="menu" class="wrap sec"><h2>O nosso menu</h2><div id="cats" class="cats"></div><div id="grid" class="grid"></div></section>
-<section id="rastreio" class="band"><div class="wrap sec"><h2>Rastrear pedido</h2><p>Introduza a referência que recebeu ao finalizar (ex.: AF-261005-A1B2C).</p>
+<section id="sobre" class="band"><div class="wrap sec sb"><div class="sbt"><span class="eye">Sobre nós</span><h2>Jovens, com fome de fazer bem.</h2>
+<p>A Aliado Food existe para ser, de facto, o seu aliado na fome. Cozinhamos com carinho, entregamos com rapidez e tratamos cada pedido como se fosse de um amigo.</p>
+<p>Somos uma equipa <b>100% jovem</b>: gente que cozinha, atende e entrega com energia, sorriso e atenção ao detalhe. Estamos no aeroporto de Luanda e levamos o nosso sabor a toda a cidade.</p>
+<ul class="vals"><li><b>Sabor em primeiro lugar</b><span>Refeições, pizzas, salgados e doces feitos para repetir.</span></li><li><b>Rapidez que se sente</b><span>Do pedido à mesa, cada minuto conta.</span></li><li><b>Proximidade</b><span>Atendimento humano, simpático e sem complicações.</span></li></ul></div>
+<div class="sbi"><img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=700" alt="Cozinha Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700" alt="Equipa Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><div class="badge"><b>100%</b><span>equipa jovem</span></div></div></div></section>
+<section id="rastreio"><div class="wrap sec"><h2>Rastrear pedido</h2><p>Introduza a referência que recebeu ao finalizar (ex.: AF-261005-A1B2C).</p>
 <form id="trk" class="inl"><input id="ref" placeholder="Referência do pedido" required><button class="btn">Rastrear</button></form><div id="trkOut"></div></div></section>
 <section id="parceiros" class="wrap sec"><h2>Parceiros</h2><div id="partners" class="logos"></div></section>
 <section id="actividades" class="band"><div class="wrap sec"><h2>Actividades e eventos</h2><div id="events" class="grid"></div></div></section>
@@ -27,10 +32,13 @@
 <form id="job" class="fm"><input name="name" placeholder="Nome completo" required><input name="email" type="email" placeholder="Email" required><input name="phone" placeholder="Telemóvel" required><input name="role" placeholder="Função pretendida (ex.: cozinha, estafeta)"><textarea name="message" rows="4" placeholder="Fale-nos de si"></textarea><button class="btn">Enviar candidatura</button><p id="jobMsg"></p></form></section>
 <section class="plus"><div class="wrap pg"><div><span class="eye">Programa de Fidelidade</span><h2>ALIADO+ Clube dos Sabores</h2><p>Três níveis de benefícios: <b>Prime</b>, <b>Gold</b> com cashback e <b>VIP</b> por convite.</p></div><a class="btn big" href="https://aliadomais.lovable.app" target="_blank" rel="noopener">Conhecer o ALIADO+</a></div></section></main>
 
-<footer id="contactos"><div class="wrap fg"><div><img src="assets/logo.png" alt="Aliado Food" class="lg w"><p>Seu aliado na fome.</p></div>
-<div><h3>Contactos</h3><a href="tel:+244929809889">Telemóvel: +244 929 809 889</a><a href="https://wa.me/244929809889" target="_blank" rel="noopener">WhatsApp: +244 929 809 889</a><a href="mailto:aliadofood@hotmail.com">aliadofood@hotmail.com</a></div>
-<div><h3>Redes sociais</h3><a href="https://instagram.com/aliadofood" target="_blank" rel="noopener">Instagram @aliadofood</a><a href="https://facebook.com/aliadofood.ao" target="_blank" rel="noopener">Facebook @aliadofood.ao</a></div>
-<div><h3>Fidelidade</h3><a class="btn" href="https://aliadomais.lovable.app" target="_blank" rel="noopener">ALIADO+ Programa de Fidelidade</a><a href="admin.html" class="sm">Área da equipa</a></div></div></footer>
+<footer id="contactos"><div class="wrap"><div class="ft">
+<div class="fb"><img src="assets/logo.png" alt="Aliado Food" class="lg w"><p>Seu aliado na fome. Refeições, pizzas, salgados, doces e bebidas, feitos com carinho e entregues com rapidez.</p>
+<div class="soc"><a href="https://instagram.com/aliadofood" target="_blank" rel="noopener">Instagram <small>@aliadofood</small></a><a href="https://facebook.com/aliadofood.ao" target="_blank" rel="noopener">Facebook <small>@aliadofood.ao</small></a></div></div>
+<div><h3>Navegar</h3><a href="#menu">Menu</a><a href="#sobre">Sobre nós</a><a href="#rastreio">Rastrear pedido</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></div>
+<div><h3>Fale connosco</h3><a href="tel:+244929809889">Telemóvel<small>+244 929 809 889</small></a><a href="https://wa.me/244929809889" target="_blank" rel="noopener">WhatsApp<small>+244 929 809 889</small></a><a href="mailto:aliadofood@hotmail.com">Email<small>aliadofood@hotmail.com</small></a></div>
+<div><h3>ALIADO+</h3><p>O Clube dos Sabores: pontos, cashback e benefícios exclusivos para quem nos acompanha.</p><a class="btn" href="https://aliadomais.lovable.app" target="_blank" rel="noopener">Aderir ao ALIADO+</a></div></div>
+<div class="fl"><div class="fr"><p>© <span id="yr"></span> Aliado Food. Todos os direitos reservados.</p><a href="admin.html" class="sm">Área da equipa</a></div><p id="legal" class="lgl"></p></div></div></footer>
 
 <aside id="drawer"><div class="dh"><h3>O seu carrinho</h3><button id="cx" class="x" aria-label="Fechar">×</button></div><div id="items"></div><div class="dt"><span>Subtotal</span><b id="sub">0 Kz</b></div><button id="go" class="btn big">Finalizar pedido</button></aside><div id="ov"></div>
 
@@ -42,4 +50,4 @@
 <label class="ck"><input type="checkbox" id="wa" checked> Enviar também por WhatsApp (atendimento mais rápido)</label>
 <div class="tot"><span>Subtotal</span><b id="t1"></b><span>Entrega</span><b id="t2">—</b><span>Total</span><b id="t3" class="big"></b></div><p id="err" class="err"></p><button class="btn big" id="sendBtn">Confirmar pedido</button></form>
 <div id="ok" hidden></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/app.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/empresa.js"></script><script src="js/app.js"></script></body></html>
