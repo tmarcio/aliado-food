@@ -2,7 +2,7 @@ const C=window.CFG,$=s=>document.querySelector(s),$$=s=>[...document.querySelect
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const kz=n=>new Intl.NumberFormat('pt-AO').format(n)+' Kz';
 const FB="this.onerror=null;this.src='assets/icon.png'";
-const ok=/^https?:/.test(C.SUPABASE_URL);let S={},sb,P=[],Z=[],cat='Todos',cart=JSON.parse(localStorage.af_cart||'{}');
+const ok=/^https?:/.test(C.SUPABASE_URL);let S=JSON.parse(localStorage.af_logos||'{}'),LR=localStorage.af_logos!=null,sb,P=[],Z=[],cat='Todos',cart=JSON.parse(localStorage.af_cart||'{}');
 const ST={recebido:'Pedido recebido',preparando:'Em preparação',pronto:'Pronto',a_caminho:'A caminho',entregue:'Entregue',cancelado:'Cancelado'};
 const FLOW={pickup:['recebido','preparando','pronto','entregue'],delivery:['recebido','preparando','a_caminho','entregue']};
 
@@ -15,7 +15,7 @@ $$('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderMenu();$('#menu').
 if(!ok){$('#warn').hidden=false}else{sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_KEY);load()}
 async function load(){
  const [p,z,pa,ev,se]=await Promise.all([sb.from('products').select('*').order('category').order('name'),sb.from('zones').select('*').order('municipality'),sb.from('partners').select('*').order('name'),sb.from('events').select('*').order('event_date',{ascending:false}),sb.from('settings').select('*')]);
- S=Object.fromEntries((se.data||[]).map(r=>[r.key,r.value]));logos();
+ S=Object.fromEntries((se.data||[]).map(r=>[r.key,r.value]));localStorage.af_logos=JSON.stringify(S);LR=true;logos();
  P=p.data||[];Z=z.data||[];renderMenu();renderCart();
  $('#mun').innerHTML='<option value="">Município (obrigatório)</option>'+Z.map(x=>`<option>${esc(x.municipality)}</option>`).join('');
 $('#partners').innerHTML=(pa.data||[]).map(x=>{const u=/^https?:\/\//.test(x.url||'')?x.url:'',i=`<img src="${esc(x.image_url)}" alt="${esc(x.name)}" onerror="${FB}"><p>${esc(x.name)}</p>`;return u?`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(x.name)} (abre noutro separador)">${i}<small>Visitar</small></a>`:`<div>${i}</div>`}).join('')||'<p>Em breve.</p>';
@@ -71,4 +71,5 @@ const IC={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.af_theme=t;logos();$('#themeBtn').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[t=='dark'?'sun':'moon']}</svg>`}
 $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');setTheme(document.documentElement.dataset.theme||'light');
 
-function logos(){const dk=document.documentElement.dataset.theme=='dark',h=(dk&&S.logo_header_dark)||S.logo_header,f=S.logo_footer,set=(el,u)=>{if(!el)return;el.src=u||'assets/logo.png';el.classList.toggle('tr',!!u)};set($('#logoH'),h);set($('#logoF'),f)}
+function logos(){const dk=document.documentElement.dataset.theme=='dark',h=(dk&&S.logo_header_dark)||S.logo_header,f=S.logo_footer,set=(el,u)=>{if(!el)return;el.src=u||'assets/logo.png';el.classList.toggle('tr',!!u)},ph=(id,u)=>{const el=$(id);if(!el)return;if(!el.dataset.d)el.dataset.d=el.getAttribute('src');el.src=u||el.dataset.d};set($('#logoH'),h);set($('#logoF'),f);ph('#sbi1',S.sobre_img1);ph('#sbi2',S.sobre_img2);if(LR)document.querySelectorAll('img.lg,img.sbp').forEach(e=>e.classList.add('on'))}
+setTimeout(()=>{LR=true;logos()},2500);
