@@ -2,17 +2,19 @@
 <title>Aliado Food — Seu aliado na fome</title><meta name="description" content="Refeições, pizzas, salgados, doces e bebidas com entrega em Luanda.">
 <link rel="icon" href="assets/icon.png"><script>document.documentElement.dataset.theme=localStorage.af_theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")</script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500..800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=3"><noscript><style>img.lg{visibility:visible}</style></noscript><style id="sobre-css">
-#sobre .lead{font-size:20px;color:var(--d);font-weight:500}.sb{margin-bottom:48px}
-.aliado{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:48px}
-.aliado li{background:#fff;border-radius:16px;padding:20px;border-top:4px solid var(--o);font-size:17px;line-height:1.5}.aliado b{color:var(--r);font:800 20px 'Bricolage Grotesque',sans-serif;display:block}
-.sb2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}.blk{background:#fff;border-radius:20px;padding:30px;border:1px solid var(--ln)}.blk h3{font-size:26px;margin-bottom:14px}.blk p{margin-bottom:12px;color:var(--g);font-size:17px}
-.qt{border-left:4px solid var(--r);padding-left:16px;color:var(--d)!important;font-weight:500}
-.cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px}.pil{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 18px}.pil li{background:var(--r);color:#fff;border-radius:99px;padding:8px 18px;font-weight:600}
-.fin{background:linear-gradient(120deg,#7d1407,#bf220d);color:#fff;border-radius:20px;padding:34px;display:flex;flex-direction:column;gap:12px;justify-content:center}.fin p{opacity:.9}.fin h3{font-size:30px}.fin span{color:var(--o);font-weight:600;font-size:18px}.fin b{font:800 22px 'Bricolage Grotesque',sans-serif;letter-spacing:.08em;margin-top:6px}.fin em{font-style:normal;opacity:.85}
-[data-theme=dark] .aliado li,[data-theme=dark] .blk{background:#201311}[data-theme=dark] #sobre .lead,[data-theme=dark] .qt{color:#f6ece6!important}[data-theme=dark] .aliado b{color:#ff7a5f}
-@media(max-width:820px){.sb2,.cmp{grid-template-columns:1fr}.blk,.fin{padding:24px}}
-</style></head><body>
+<link rel="stylesheet" href="css/style.css?v=4"><noscript><style>img.lg,img.sbp{visibility:visible}</style></noscript><style id="sobre-css">
+#sobre p{color:#5a4a43;font-size:18px;margin-bottom:14px}[data-theme=dark] #sobre p{color:#d9c8be}
+#sobre b{color:var(--r)}[data-theme=dark] #sobre b{color:#ff7a5f}
+.sb{margin-bottom:40px}.aliado{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+.aliado li{background:#fff;border-radius:16px;padding:18px 20px;border-top:4px solid var(--o);font-size:18px;line-height:1.5;color:#5a4a43}.aliado b{font:800 20px 'Bricolage Grotesque',sans-serif;display:block}
+.sb2{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px}.blk{background:#fff;border-radius:20px;padding:26px;border:1px solid var(--ln)}.blk h3{font-size:22px;margin-bottom:12px}.blk p:last-child{margin-bottom:0}
+#sobre .qt{border-left:4px solid var(--r);padding-left:14px;color:var(--d);font-weight:600}[data-theme=dark] #sobre .qt{color:#f6ece6}
+.pil{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.pil li{background:var(--r);color:#fff;border-radius:99px;padding:6px 16px;font-weight:600;font-size:15px}
+.fin{background:linear-gradient(120deg,#7d1407,#bf220d);color:#fff;border-radius:20px;padding:30px 34px;display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap}.fin h3{font-size:clamp(24px,3vw,32px);max-width:560px}
+#sobre .fin p{color:#ffffffdd;margin-bottom:8px}.sig{display:flex;flex-direction:column;gap:4px}.sig span{color:var(--o);font-weight:600;font-size:18px}.sig b{font:800 24px 'Bricolage Grotesque',sans-serif;letter-spacing:.08em;color:#fff!important}.sig em{font-style:normal;opacity:.85}
+[data-theme=dark] .aliado li,[data-theme=dark] .blk{background:#201311;color:#d9c8be}
+img.sbp{visibility:hidden}img.sbp.on{visibility:visible}
+@media(max-width:900px){.sb2{grid-template-columns:1fr}.fin{padding:24px}}</style></head><body>
 <div id="warn" hidden>Configure o Supabase em <code>js/config.js</code> para ver o menu e receber pedidos.</div>
 <header class="nav"><a href="#top"><img src="assets/logo.png" alt="Aliado Food" class="lg" id="logoH"></a>
 <nav><a href="#menu">Menu</a><a href="#sobre">Sobre nós</a><a href="#rastreio">Rastrear</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></nav>
@@ -31,15 +33,15 @@
 <section id="menu" class="wrap sec"><h2>O nosso menu</h2><div id="cats" class="cats"></div><div id="grid" class="grid"></div></section>
 <section id="sobre" class="band"><div class="wrap sec">
 <div class="sb"><div class="sbt"><span class="eye">Somos a Aliado Food</span><h2>Mais do que alimentar.<br>Estar ao seu lado.</h2>
-<p class="lead">A Aliado Food nasceu de uma ideia simples, mas essencial: a comida deve estar onde as pessoas precisam dela, quando precisam dela e com a qualidade que merecem.</p>
-<p>Somos uma marca angolana de alimentação e delivery criada para tornar o dia a dia mais simples, saboroso e conveniente. Mais do que preparar refeições, procuramos criar uma experiência marcada pelo sabor, pela qualidade, pela agilidade e pela proximidade.</p>
+<p>A Aliado Food nasceu de uma ideia simples: a comida deve estar onde as pessoas precisam dela, quando precisam e com a qualidade que merecem.</p>
+<p>Somos uma marca angolana de alimentação e delivery, criada para tornar o dia a dia mais simples, saboroso e conveniente, com sabor, qualidade, agilidade e proximidade.</p>
 <p>O nosso propósito está no próprio nome: <b>ser Aliado.</b></p></div>
-<div class="sbi"><img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=700" alt="Cozinha Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700" alt="Equipa Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><div class="badge"><b>100%</b><span>equipa jovem</span></div></div></div>
-<ul class="aliado"><li><b>Aliado</b> de quem começa cedo o dia.</li><li><b>Aliado</b> de quem precisa de uma refeição durante o trabalho.</li><li><b>Aliado</b> de quem quer simplesmente comer bem sem complicações.</li><li><b>Aliado</b> de empresas, equipas e pessoas que confiam em nós para levar uma boa refeição até onde estão.</li></ul>
-<div class="sb2"><article class="blk"><h3>Uma equipa jovem. Uma energia que nos move.</h3><p>Somos uma equipa 100% jovem, movida por iniciativa, criatividade e vontade de fazer acontecer. Cozinhamos, atendemos e entregamos com profissionalismo, energia e atenção aos detalhes, porque acreditamos que a qualidade de uma marca também está na forma como trata as pessoas.</p><p class="qt">Cada pedido representa alguém que confiou em nós.<br>E é essa confiança que transforma uma simples encomenda numa responsabilidade.</p></article>
-<article class="blk"><h3>Do Aeroporto de Luanda para a cidade.</h3><p>A nossa história está ligada ao Aeroporto Internacional Dr. António Agostinho Neto, em Luanda, onde começámos a construir a nossa presença e a compreender uma necessidade cada vez mais evidente: alimentação de qualidade, acessível e conveniente, pronta para acompanhar o ritmo de quem não pode parar.</p><p>Hoje, levamos essa mesma essência para além do aeroporto, aproximando a Aliado Food de cada vez mais pessoas e lugares.</p></article></div>
-<div class="cmp"><div class="blk"><h3>O nosso compromisso</h3><p>Queremos que cada experiência com a Aliado Food seja simples de lembrar:</p><ul class="pil"><li>Bom sabor</li><li>Boa qualidade</li><li>Bom atendimento</li><li>Entrega com confiança</li></ul><p>Porque acreditamos que alimentar alguém é também uma forma de cuidar.</p></div>
-<div class="fin"><p>E é por isso que não queremos ser apenas mais uma opção quando a fome aparece.</p><h3>Queremos ser a primeira escolha quando precisar de um aliado.</h3><span>Aliando sabor e qualidade.</span><b>ALIADO FOOD</b><em>O seu aliado na fome.</em></div></div>
+<div class="sbi"><img id="sbi1" class="sbp" src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=700" alt="Cozinha Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><img id="sbi2" class="sbp" src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700" alt="Equipa Aliado Food" onerror="this.onerror=null;this.src='assets/icon.png'"><div class="badge"><b>100%</b><span>equipa jovem</span></div></div></div>
+<ul class="aliado"><li><b>Aliado</b> de quem começa cedo o dia.</li><li><b>Aliado</b> de quem precisa de uma refeição durante o trabalho.</li><li><b>Aliado</b> de quem quer comer bem sem complicações.</li><li><b>Aliado</b> de empresas e equipas que confiam em nós.</li></ul>
+<div class="sb2"><article class="blk"><h3>Uma equipa jovem</h3><p>Somos uma equipa <b>100% jovem</b>, movida por iniciativa, criatividade e vontade de fazer acontecer. Cozinhamos, atendemos e entregamos com profissionalismo, energia e atenção aos detalhes.</p><p class="qt">Cada pedido representa alguém que confiou em nós.</p></article>
+<article class="blk"><h3>Do Aeroporto de Luanda para a cidade</h3><p>A nossa história começou no Aeroporto Internacional Dr. António Agostinho Neto, onde percebemos a necessidade de alimentação de qualidade, acessível e conveniente para quem não pode parar. Hoje levamos essa essência a cada vez mais pessoas e lugares.</p></article>
+<article class="blk"><h3>O nosso compromisso</h3><ul class="pil"><li>Bom sabor</li><li>Boa qualidade</li><li>Bom atendimento</li><li>Entrega com confiança</li></ul><p>Porque alimentar alguém é também uma forma de cuidar.</p></article></div>
+<div class="fin"><div><p>Não queremos ser apenas mais uma opção quando a fome aparece.</p><h3>Queremos ser a primeira escolha quando precisar de um aliado.</h3></div><div class="sig"><span>Aliando sabor e qualidade.</span><b>ALIADO FOOD</b><em>O seu aliado na fome.</em></div></div>
 </div></section>
 <section id="rastreio"><div class="wrap sec"><h2>Rastrear pedido</h2><p>Introduza a referência que recebeu ao finalizar (ex.: AF-261005-A1B2C).</p>
 <form id="trk" class="inl"><input id="ref" placeholder="Referência do pedido" required><button class="btn">Rastrear</button></form><div id="trkOut"></div></div></section>
@@ -67,4 +69,4 @@
 <label class="ck"><input type="checkbox" id="wa" checked> Enviar também por WhatsApp (atendimento mais rápido)</label>
 <div class="tot"><span>Subtotal</span><b id="t1"></b><span>Entrega</span><b id="t2">—</b><span>Total</span><b id="t3" class="big"></b></div><p id="err" class="err"></p><button class="btn big" id="sendBtn">Confirmar pedido</button></form>
 <div id="ok" hidden></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/empresa.js"></script><script src="js/app.js?v=3"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/empresa.js"></script><script src="js/app.js?v=4"></script></body></html>
