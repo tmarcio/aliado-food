@@ -2,7 +2,17 @@
 <title>Aliado Food — Seu aliado na fome</title><meta name="description" content="Refeições, pizzas, salgados, doces e bebidas com entrega em Luanda.">
 <link rel="icon" href="assets/icon.png"><script>document.documentElement.dataset.theme=localStorage.af_theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")</script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500..800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css"><noscript><style>img.lg{visibility:visible}</style></noscript></head><body>
+<link rel="stylesheet" href="css/style.css?v=3"><noscript><style>img.lg{visibility:visible}</style></noscript><style id="sobre-css">
+#sobre .lead{font-size:20px;color:var(--d);font-weight:500}.sb{margin-bottom:48px}
+.aliado{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:48px}
+.aliado li{background:#fff;border-radius:16px;padding:20px;border-top:4px solid var(--o);font-size:17px;line-height:1.5}.aliado b{color:var(--r);font:800 20px 'Bricolage Grotesque',sans-serif;display:block}
+.sb2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}.blk{background:#fff;border-radius:20px;padding:30px;border:1px solid var(--ln)}.blk h3{font-size:26px;margin-bottom:14px}.blk p{margin-bottom:12px;color:var(--g);font-size:17px}
+.qt{border-left:4px solid var(--r);padding-left:16px;color:var(--d)!important;font-weight:500}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px}.pil{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 18px}.pil li{background:var(--r);color:#fff;border-radius:99px;padding:8px 18px;font-weight:600}
+.fin{background:linear-gradient(120deg,#7d1407,#bf220d);color:#fff;border-radius:20px;padding:34px;display:flex;flex-direction:column;gap:12px;justify-content:center}.fin p{opacity:.9}.fin h3{font-size:30px}.fin span{color:var(--o);font-weight:600;font-size:18px}.fin b{font:800 22px 'Bricolage Grotesque',sans-serif;letter-spacing:.08em;margin-top:6px}.fin em{font-style:normal;opacity:.85}
+[data-theme=dark] .aliado li,[data-theme=dark] .blk{background:#201311}[data-theme=dark] #sobre .lead,[data-theme=dark] .qt{color:#f6ece6!important}[data-theme=dark] .aliado b{color:#ff7a5f}
+@media(max-width:820px){.sb2,.cmp{grid-template-columns:1fr}.blk,.fin{padding:24px}}
+</style></head><body>
 <div id="warn" hidden>Configure o Supabase em <code>js/config.js</code> para ver o menu e receber pedidos.</div>
 <header class="nav"><a href="#top"><img src="assets/logo.png" alt="Aliado Food" class="lg" id="logoH"></a>
 <nav><a href="#menu">Menu</a><a href="#sobre">Sobre nós</a><a href="#rastreio">Rastrear</a><a href="#parceiros">Parceiros</a><a href="#actividades">Actividades</a><a href="#trabalhe">Trabalhe connosco</a></nav>
@@ -57,4 +67,4 @@
 <label class="ck"><input type="checkbox" id="wa" checked> Enviar também por WhatsApp (atendimento mais rápido)</label>
 <div class="tot"><span>Subtotal</span><b id="t1"></b><span>Entrega</span><b id="t2">—</b><span>Total</span><b id="t3" class="big"></b></div><p id="err" class="err"></p><button class="btn big" id="sendBtn">Confirmar pedido</button></form>
 <div id="ok" hidden></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/empresa.js"></script><script src="js/app.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/empresa.js"></script><script src="js/app.js?v=3"></script></body></html>
