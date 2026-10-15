@@ -74,6 +74,6 @@ $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme=='dar
 function logos(){const dk=document.documentElement.dataset.theme=='dark',h=(dk&&S.logo_header_dark)||S.logo_header,f=S.logo_footer,set=(el,u)=>{if(!el)return;el.src=u||'assets/logo.png';el.classList.toggle('tr',!!u)},ph=(id,u)=>{const el=$(id);if(!el)return;if(!el.dataset.d)el.dataset.d=el.getAttribute('src');el.src=u||el.dataset.d};set($('#logoH'),h);set($('#logoF'),f);ph('#sbi1',S.sobre_img1);ph('#sbi2',S.sobre_img2);if(LR)document.querySelectorAll('img.lg,img.sbp').forEach(e=>e.classList.add('on'))}
 setTimeout(()=>{LR=true;logos()},2500);
 
-$('#teamBtn').onclick=async()=>{const g=$('#teamGrid');$('#teamDlg').showModal();if(!sb)return;g.innerHTML='<p>A carregar…</p>';const {data}=await sb.from('team').select('*').order('name');
- g.innerHTML=(data||[]).map(m=>`<div class="tm"><img src="${esc(m.image_url)}" alt="${esc(m.name)}" onerror="${FB}"><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>`).join('')||'<p>Em breve vai conhecer quem faz a Aliado Food acontecer.</p>'};
-$('#teamX').onclick=()=>$('#teamDlg').close();
+$('#teamBtn')?.addEventListener('click',async()=>{const g=$('#teamGrid');$('#teamDlg').showModal();if(!sb)return;g.innerHTML='<p>A carregar…</p>';const {data}=await sb.from('team').select('*').order('name');
+ g.innerHTML=(data||[]).map(m=>`<div class="tm"><img src="${esc(m.image_url)}" alt="${esc(m.name)}" onerror="${FB}"><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>`).join('')||'<p>Em breve vai conhecer quem faz a Aliado Food acontecer.</p>'});
+$('#teamX')?.addEventListener('click',()=>$('#teamDlg').close());
