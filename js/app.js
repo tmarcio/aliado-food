@@ -2,7 +2,7 @@ const C=window.CFG,$=s=>document.querySelector(s),$$=s=>[...document.querySelect
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const kz=n=>new Intl.NumberFormat('pt-AO').format(n)+' Kz';
 const FB="this.onerror=null;this.src='assets/icon.png'";
-const ok=/^https?:/.test(C.SUPABASE_URL);let S=JSON.parse(localStorage.af_logos||'{}'),LR=localStorage.af_logos!=null,sb,P=[],Z=[],cat='Todos',cart=JSON.parse(localStorage.af_cart||'{}');
+const ok=/^https?:/.test(C.SUPABASE_URL);let SS={open:true,methods:'cash',min_order:0},S=JSON.parse(localStorage.af_logos||'{}'),LR=localStorage.af_logos!=null,sb,P=[],Z=[],cat='Todos',cart=JSON.parse(localStorage.af_cart||'{}');
 const ST={recebido:'Pedido recebido',preparando:'Em preparação',pronto:'Pronto',a_caminho:'A caminho',entregue:'Entregue',cancelado:'Cancelado'};
 const FLOW={pickup:['recebido','preparando','pronto','entregue'],delivery:['recebido','preparando','a_caminho','entregue']};
 
@@ -12,7 +12,7 @@ setInterval(()=>{const r=$('#rot');r.classList.add('out');setTimeout(()=>{r.text
 $('#top').addEventListener('mousemove',e=>{const b=$('#stage').getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;$('.ico').style.transform=`rotateY(${x*18}deg) rotateX(${-y*18}deg) scale(1.04)`});
 $$('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderMenu();$('#menu').scrollIntoView()});
 
-if(!ok){$('#warn').hidden=false}else{sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_KEY);load()}
+if(!ok){$('#warn').hidden=false}else{sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_KEY);load();storeStatus()}
 async function load(){
  const [p,z,pa,ev,se]=await Promise.all([sb.from('products').select('*').order('category').order('name'),sb.from('zones').select('*').order('municipality'),sb.from('partners').select('*').order('name'),sb.from('events').select('*').order('event_date',{ascending:false}),sb.from('settings').select('*')]);
  S=Object.fromEntries((se.data||[]).map(r=>[r.key,r.value]));localStorage.af_logos=JSON.stringify(S);LR=true;logos();
@@ -34,23 +34,27 @@ function renderCart(){
  cart=Object.fromEntries(Object.entries(cart).filter(([id])=>!P.length||P.some(p=>p.id==id)));
  $('#cartN').textContent=Object.values(cart).reduce((a,b)=>a+b,0);$('#sub').textContent=kz(sub());
  $('#items').innerHTML=Object.entries(cart).map(([id,q])=>{const p=P.find(x=>x.id==id);return p?`<div class="it"><div><b>${esc(p.name)}</b><br><small>${kz(p.price)}</small></div><div class="q"><button data-d="-1" data-i="${id}">−</button>${q}<button data-d="1" data-i="${id}">+</button></div></div>`:''}).join('')||'<p>O carrinho está vazio.</p>';
- $$('#items button').forEach(b=>b.onclick=()=>add(b.dataset.i,+b.dataset.d));$('#go').disabled=!Object.keys(cart).length;
+ $$('#items button').forEach(b=>b.onclick=()=>add(b.dataset.i,+b.dataset.d));const miss=Math.max(0,(+SS.min_order||0)-sub());$('#minNote').textContent=+SS.min_order?`Pedido mínimo: ${kz(SS.min_order)}${miss&&sub()?' — faltam '+kz(miss):''}`:'';$('#go').disabled=!Object.keys(cart).length||!SS.open||miss>0;$('#go').textContent=SS.open?'Finalizar pedido':'Fechado de momento';
 }
 const openCart=()=>{$('#drawer').classList.add('open');$('#ov').classList.add('on')},closeCart=()=>{$('#drawer').classList.remove('open');$('#ov').classList.remove('on')};
 $('#cartBtn').onclick=openCart;$('#cx').onclick=closeCart;$('#ov').onclick=closeCart;
-$('#go').onclick=()=>{closeCart();$('#cf').hidden=false;$('#ok').hidden=true;$('#err').textContent='';upd();$('#co').showModal()};
+$('#go').onclick=()=>{closeCart();$('#cf').hidden=false;$('#ok').hidden=true;$('#err').textContent='';payUI();upd();$('#co').showModal()};
 $('#cox').onclick=()=>$('#co').close();
-const mode=()=>$('#cf').mode.value,fee=()=>mode()=='delivery'?Z.find(z=>z.municipality==$('#mun').value)?.fee:0;
-function upd(){const d=mode()=='delivery',f=fee();$('#addr').hidden=!d;$('#mun').required=d;$('#t1').textContent=kz(sub());$('#t2').textContent=!d?'Grátis (levantamento)':f==null?'Escolha o município':kz(f);$('#t3').textContent=kz(sub()+(f||0))}
+const mode=()=>$('#cf').elements.mode.value,fee=()=>mode()=='delivery'?Z.find(z=>z.municipality==$('#mun').value)?.fee:0;
+function upd(){payInfo();const d=mode()=='delivery',f=fee();$('#addr').hidden=!d;$('#mun').required=d;$('#t1').textContent=kz(sub());$('#t2').textContent=!d?'Grátis (levantamento)':f==null?'Escolha o município':kz(f);$('#t3').textContent=kz(sub()+(f||0))}
 $('#cf').addEventListener('input',upd);
 $('#cf').onsubmit=async e=>{e.preventDefault();const f=e.target,b=$('#sendBtn');b.disabled=true;$('#err').textContent='';
- const {data:ref,error}=await sb.rpc('create_order',{p_name:f.name.value,p_phone:f.phone.value,p_mode:mode(),p_mun:f.mun.value,p_neigh:f.neigh.value,p_street:f.street.value,p_notes:f.notes.value,p_items:Object.entries(cart).map(([id,qty])=>({id,qty}))});
+ if(f.elements.website.value)return;
+ if(Date.now()-(+localStorage.af_last||0)<45000){b.disabled=false;$('#err').textContent='Aguarde um instante antes de enviar outro pedido.';return}
+ if(!f.elements.pay?.value){b.disabled=false;$('#err').textContent='Escolha a forma de pagamento.';return}
+ const {data:ref,error}=await sb.rpc('create_order',{p_name:f.elements.name.value,p_phone:f.elements.phone.value,p_mode:mode(),p_mun:f.elements.mun.value,p_neigh:f.elements.neigh.value,p_street:f.elements.street.value,p_notes:f.elements.notes.value,p_items:Object.entries(cart).map(([id,qty])=>({id,qty})),p_payment:f.elements.pay.value});
  b.disabled=false;if(error){$('#err').textContent='Não foi possível enviar: '+error.message;return}
  const lines=Object.entries(cart).map(([id,q])=>{const p=P.find(x=>x.id==id);return `• ${q}x ${p.name}`}).join('\n'),tot=sub()+(fee()||0);
- const msg=`Olá Aliado Food! Pedido ${ref}\n${lines}\n${mode()=='delivery'?`Entrega: ${f.mun.value}${f.neigh.value?', '+f.neigh.value:''}${f.street.value?', '+f.street.value:''}`:'Levantamento no ponto de venda'}\nTotal: ${kz(tot)}\nCliente: ${f.name.value} (${f.phone.value})`;
+ const msg=`Olá Aliado Food! Pedido ${ref}\n${lines}\n${mode()=='delivery'?`Entrega: ${f.elements.mun.value}${f.elements.neigh.value?', '+f.elements.neigh.value:''}${f.elements.street.value?', '+f.elements.street.value:''}`:'Levantamento no ponto de venda'}\nPagamento: ${PAYL[f.elements.pay.value]}\nTotal: ${kz(tot)}\nCliente: ${f.elements.name.value} (${f.elements.phone.value})`;
  const url=`https://wa.me/${C.WHATSAPP}?text=${encodeURIComponent(msg)}`;
- cart={};localStorage.af_cart='{}';localStorage.af_ref=ref;renderCart();f.hidden=true;
- $('#ok').hidden=false;$('#ok').innerHTML=`<h3>Pedido recebido!</h3><p>Guarde a sua referência para acompanhar o pedido:</p><div class="ref">${esc(ref)}</div><a class="btn big" href="${url}" target="_blank" rel="noopener">Enviar por WhatsApp</a><button class="btn ghost" style="color:var(--r);box-shadow:inset 0 0 0 2px var(--r)" id="trkGo">Rastrear pedido</button>`;
+ fetch('https://formsubmit.co/ajax/'+C.EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'Novo pedido '+ref,_template:'table','Referência':ref,'Cliente':f.elements.name.value,'Telemóvel':f.elements.phone.value,'Modo':mode()=='delivery'?'Entrega — '+f.elements.mun.value+' '+f.elements.neigh.value+' '+f.elements.street.value:'Levantamento','Pagamento':PAYL[f.elements.pay.value],'Total':kz(tot),'Itens':lines.replace(/\n/g,' | '),'Notas':f.elements.notes.value})}).catch(()=>{});
+ cart={};localStorage.af_cart='{}';localStorage.af_ref=ref;localStorage.af_last=Date.now();renderCart();f.hidden=true;
+ $('#ok').hidden=false;$('#ok').innerHTML=`<h3>Pedido recebido!</h3><p>Guarde a sua referência para acompanhar o pedido:</p><div class="ref">${esc(ref)}</div>${['transfer','express'].includes(f.elements.pay.value)?'<p>Efectue o pagamento e envie o comprovativo pelo WhatsApp.</p>':''}<a class="btn big" href="${url}" target="_blank" rel="noopener">Enviar por WhatsApp</a><button class="btn ghost" style="color:var(--r);box-shadow:inset 0 0 0 2px var(--r)" id="trkGo">Rastrear pedido</button>`;
  $('#trkGo').onclick=()=>{$('#co').close();$('#ref').value=ref;$('#rastreio').scrollIntoView();track(ref)};
  if($('#wa').checked)window.open(url,'_blank');
 };
@@ -77,3 +81,12 @@ setTimeout(()=>{LR=true;logos()},2500);
 $('#teamBtn')?.addEventListener('click',async()=>{const g=$('#teamGrid');$('#teamDlg').showModal();if(!sb)return;g.innerHTML='<p>A carregar…</p>';const {data}=await sb.from('team').select('*').order('name');
  g.innerHTML=(data||[]).map(m=>`<div class="tm"><img src="${esc(m.image_url)}" alt="${esc(m.name)}" onerror="${FB}"><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>`).join('')||'<p>Em breve vai conhecer quem faz a Aliado Food acontecer.</p>'});
 $('#teamX')?.addEventListener('click',()=>$('#teamDlg').close());
+
+const PAYL={cash:'Numerário',tpa:'TPA / Multicaixa na entrega',transfer:'Transferência bancária',express:'Multicaixa Express'};
+function payUI(){const ms=(SS.methods||'cash').split(',').filter(m=>PAYL[m]);$('#payOpts').innerHTML=ms.map((m,i)=>`<label><input type="radio" name="pay" value="${m}" ${i?'':'checked'}>${PAYL[m]}</label>`).join('');payInfo()}
+function payInfo(){const v=$('#cf').elements.pay?.value,b=$('#payInfo');b.hidden=!(['transfer','express'].includes(v)&&SS.pay_info);b.textContent=SS.pay_info||''}
+async function storeStatus(){if(!sb)return;const {data}=await sb.rpc('store_status');if(data)SS=data;const b=$('#storebar'),hm=t=>t?t.slice(0,5):'',p=[];
+ if(!SS.open){b.className='sbar closed';p.push('<b>Fechado de momento</b>');p.push(SS.reason=='hours'&&SS.open_time?'Abrimos às '+hm(SS.open_time):'Voltamos em breve')}
+ else{b.className='sbar';p.push('<b>Aberto</b>');if(SS.open_time&&SS.close_time)p.push(hm(SS.open_time)+' – '+hm(SS.close_time));if(SS.eta)p.push('Entrega em '+esc(SS.eta));if(+SS.min_order)p.push('Pedido mínimo '+kz(SS.min_order))}
+ b.innerHTML=p.map(x=>`<span>${x}</span>`).join('');b.hidden=!data;renderCart()}
+setInterval(storeStatus,120000);
