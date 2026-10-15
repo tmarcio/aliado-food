@@ -90,3 +90,10 @@ async function storeStatus(){if(!sb)return;const {data}=await sb.rpc('store_stat
  else{b.className='sbar';p.push('<b>Aberto</b>');if(SS.open_time&&SS.close_time)p.push(hm(SS.open_time)+' – '+hm(SS.close_time));if(SS.eta)p.push('Entrega em '+esc(SS.eta));if(+SS.min_order)p.push('Pedido mínimo '+kz(SS.min_order))}
  b.innerHTML=p.map(x=>`<span>${x}</span>`).join('');b.hidden=!data;renderCart()}
 setInterval(storeStatus,120000);
+
+let DP;const ib=$('#installBtn'),inApp=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e;if(ib)ib.hidden=false});
+if(ib&&/iphone|ipad|ipod/i.test(navigator.userAgent)&&!inApp)ib.hidden=false;
+ib?.addEventListener('click',async()=>{if(DP){DP.prompt();await DP.userChoice;DP=null;ib.hidden=true}else $('#instDlg').showModal()});
+addEventListener('appinstalled',()=>{if(ib)ib.hidden=true});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));

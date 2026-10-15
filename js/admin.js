@@ -89,3 +89,5 @@ async function shop(){const {data}=await sb.from('settings').select('*'),S=Objec
  $('#nt').onclick=()=>window.Notification?Notification.requestPermission().then(p=>toast(p=='granted'?'Notificações activadas':'Notificações bloqueadas')):toast('Este navegador não suporta notificações');
  $('#bk').onclick=async()=>{const out={};for(const t of ['orders','products','zones','couriers','partners','events','team','settings','applications']){const {data}=await sb.from(t).select('*').limit(10000);out[t]=data||[]}dl(`aliado-food-backup-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(out,null,1),'application/json')}}
 init();
+
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
