@@ -16,3 +16,13 @@ Pedidos (estado, atribuir estafeta, enviar por WhatsApp ao estafeta), Produtos, 
 - As taxas por Município no SQL são **estimativas** baseadas em corridas de moto tipo Yango a partir de Luanda: confirme e ajuste em *Admin > Taxas de entrega*.
 - O preço e a taxa de cada pedido são calculados no servidor (função `create_order`), por isso o cliente não os consegue alterar.
 - As imagens iniciais (Unsplash/placeholders) são substituíveis no admin.
+
+## Loja, pagamento e continuidade
+- **Painel > Loja e pagamentos:** pausar pedidos, horário (Luanda), pedido mínimo, tempo estimado, formas de pagamento e dados de transferência/Express, notificações do navegador e cópia de segurança.
+- **Avisos de pedidos:** cada pedido é enviado por email (FormSubmit) e, com o painel aberto, gera aviso sonoro e notificação. Um aviso automático por WhatsApp exige um serviço pago (API do WhatsApp Business).
+- **Protecção:** limite de 3 pedidos por telemóvel e 60 no total a cada 10 minutos, validação no servidor, campo-armadilha e intervalo mínimo entre pedidos. Reduz abusos, mas não substitui um captcha.
+- **Manter o Supabase activo:** em GitHub > Settings > Secrets and variables > Actions crie `SUPABASE_URL` e `SUPABASE_KEY` (a chave pública do config.js). O ficheiro `.github/workflows/keepalive.yml` faz um pedido a cada 3 dias. O GitHub desactiva tarefas agendadas após 60 dias sem alterações ao repositório.
+- **Cópias de segurança:** botão no painel (Loja e pagamentos) e exportação CSV em Pedidos. Para cópias automáticas, o Supabase oferece-as nos planos pagos.
+
+## Versão instalável (PWA)
+Ficheiros: `manifest.webmanifest`, `admin.webmanifest`, `sw.js`, `offline.html` e `assets/icons/`. Precisa de HTTPS (o GitHub Pages já o tem). O site (`/`) e o painel (`/admin.html`) instalam-se como duas apps separadas. O service worker usa "rede primeiro": com internet mostra sempre a versão mais recente; sem internet mostra uma página de aviso.
