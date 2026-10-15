@@ -74,10 +74,6 @@ $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme=='dar
 function logos(){const dk=document.documentElement.dataset.theme=='dark',h=(dk&&S.logo_header_dark)||S.logo_header,f=S.logo_footer,set=(el,u)=>{if(!el)return;el.src=u||'assets/logo.png';el.classList.toggle('tr',!!u)},ph=(id,u)=>{const el=$(id);if(!el)return;if(!el.dataset.d)el.dataset.d=el.getAttribute('src');el.src=u||el.dataset.d};set($('#logoH'),h);set($('#logoF'),f);ph('#sbi1',S.sobre_img1);ph('#sbi2',S.sobre_img2);if(LR)document.querySelectorAll('img.lg,img.sbp').forEach(e=>e.classList.add('on'))}
 setTimeout(()=>{LR=true;logos()},2500);
 
-$('#pForm').onsubmit=async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),m=$('#pMsg');m.textContent='A enviar…';
- const {error}=sb?await sb.from('applications').insert({name:d.name,email:d.email,phone:d.phone,role:'Proposta de parceria — '+d.company,message:d.message}):{error:1};
- fetch('https://formsubmit.co/ajax/'+C.EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'Proposta de parceria — Aliado Food',...d})}).catch(()=>{});
- m.textContent=error?'Erro ao enviar. Tente novamente ou escreva para '+C.EMAIL:'Proposta enviada. Entraremos em contacto!';if(!error)f.reset()};
 $('#teamBtn').onclick=async()=>{const g=$('#teamGrid');$('#teamDlg').showModal();if(!sb)return;g.innerHTML='<p>A carregar…</p>';const {data}=await sb.from('team').select('*').order('name');
  g.innerHTML=(data||[]).map(m=>`<div class="tm"><img src="${esc(m.image_url)}" alt="${esc(m.name)}" onerror="${FB}"><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>`).join('')||'<p>Em breve vai conhecer quem faz a Aliado Food acontecer.</p>'};
 $('#teamX').onclick=()=>$('#teamDlg').close();
