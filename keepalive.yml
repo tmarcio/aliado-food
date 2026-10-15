@@ -1,0 +1,11 @@
+# Mantém o Supabase (plano gratuito) activo: evita a pausa por inactividade.
+# Em Settings > Secrets and variables > Actions, crie SUPABASE_URL e SUPABASE_KEY (a chave pública, a mesma do config.js).
+name: Manter Supabase activo
+on:
+  schedule: [{cron: '0 8 */3 * *'}]
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/settings?select=key&limit=1" -H "apikey: ${{ secrets.SUPABASE_KEY }}"
